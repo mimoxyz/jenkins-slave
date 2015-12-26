@@ -37,10 +37,13 @@ RUN yum install -y bzip2
 # Standard SSH port
 EXPOSE 22
 
+# Installing ChefDK
 RUN curl -L https://www.opscode.com/chef/install.sh | bash -s -- -P chefdk
 
-RUN chef gem install kitchen-ec2 -n /opt/chefdk/bin/
-WORKDIR /home/jenkins
-ENV PATH /root/.chefdk/gem/ruby/2.1.0/bin:/opt/chefdk/embedded/bin:$PATH
+ENV PATH /opt/chefdk/embedded/bin:$PATH
+ENV LANG=en_US.iso88591
+ENV LC_CTYPE=en_US.iso88591
+
 RUN gem install kitchen-softlayer
+
 CMD ["/usr/sbin/sshd", "-D", "-e"]
