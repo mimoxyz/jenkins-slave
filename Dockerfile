@@ -1,4 +1,4 @@
-# Based on evarga/jenkins-slave
+# Based heavily on evarga/jenkins-slave
 FROM centos:7
 
 RUN yum -y update
@@ -32,12 +32,10 @@ ADD packer.zip /var/tmp
 RUN unzip /var/tmp/packer.zip -d /usr/local/src/ && rm -f /var/tmp/packer.zip
 RUN chmod 755 -R /usr/local/src/packer/
 
-USER jenkins
-
 ENV PATH /opt/chefdk/embedded/bin:/usr/local/src/packer:$PATH
-ENV LANG=en_US.iso88591 
-ENV LC_CTYPE=en_US.iso88591
+RUN localedef -i en_US -f ISO-8859-1 en_US
+ENV LC_CTYPE="en_US.iso88591"
+
 RUN gem install kitchen-softlayer kitchen-ec2
 
-USER root
 CMD ["/usr/sbin/sshd", "-D", "-e"]
