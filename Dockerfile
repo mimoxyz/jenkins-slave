@@ -28,8 +28,8 @@ RUN curl -L https://www.opscode.com/chef/install.sh | bash -s -- -v 12.8.1
 # Installing packer
 RUN wget https://releases.hashicorp.com/packer/0.8.6/packer_0.8.6_linux_amd64.zip -O /var/tmp/packer.zip
 RUN unzip /var/tmp/packer.zip -d /usr/local/src/ && rm -f /var/tmp/packer.zip
-ADD packer-builder-softlayer /usr/local/src/
-RUN chmod 755 -R /usr/local/src/packer/
+ADD packer-builder-softlayer /usr/local/src/packer-builder-softlayer
+RUN chmod 755 -R /usr/local/src/
 
 # Set environment variables
 ENV PATH /opt/chef/embedded/bin:/usr/local/src/packer:$PATH
