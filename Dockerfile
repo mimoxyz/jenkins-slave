@@ -1,4 +1,4 @@
-# Based heavily on evarga/jenkins-slave
+# Based on evarga/jenkins-slave
 FROM centos:7
 
 RUN yum -y update
@@ -18,8 +18,6 @@ RUN ssh-keygen -t dsa -N "" -f /etc/ssh/ssh_host_dsa_key
 RUN ssh-keygen -t rsa -N "" -f /etc/ssh/ssh_host_rsa_key
 
 RUN mkdir -p /var/run/sshd
-
-
 RUN adduser jenkins
 RUN echo "jenkins:jenkins" | chpasswd
 RUN echo '%jenkins        ALL=(ALL)       NOPASSWD: ALL' >> /etc/sudoers
@@ -28,9 +26,11 @@ EXPOSE 22
 
 # Installing ChefDK
 RUN curl -L https://www.opscode.com/chef/install.sh | bash -s -- -P chefdk
-ADD packer.zip /var/tmp
+RUN wget https://releases.hashicorp.com/packer/0.8.6/packer_0.8.6_linux_amd64.zip -O /var/tmp/packer.zip
 RUN unzip /var/tmp/packer.zip -d /usr/local/src/ && rm -f /var/tmp/packer.zip
+ADD packer-builder-softlayer /usr/local/src/
 RUN chmod 755 -R /usr/local/src/packer/
+
 
 ENV PATH /opt/chefdk/embedded/bin:/usr/local/src/packer:$PATH
 RUN localedef -i en_US -f ISO-8859-1 en_US
